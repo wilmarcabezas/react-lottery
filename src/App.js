@@ -1,4 +1,6 @@
 import LotteryNumbers from './LotteryNumbers.js';
+import './style.css';
+
 
 function App() {
   return (

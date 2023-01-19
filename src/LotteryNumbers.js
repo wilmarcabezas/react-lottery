@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Modal, Tooltip } from 'antd';
 
+
 const LotteryNumbers = () => {
   const [lotteryData, setLotteryData] = useState([]);
+  const [dataSaved, setDataSaved] = useState(false);
   const [visible, setVisible] = useState(false);
   const [clickedNumber, setClickedNumber] = useState(null);
   const [formData, setFormData] = useState({
@@ -24,7 +26,7 @@ const LotteryNumbers = () => {
       }
     }
     fetchData();
-  }, []);
+  }, [dataSaved]);
 
   const handleButtonClick = (number) => {
     setClickedNumber(number);
@@ -48,6 +50,7 @@ const LotteryNumbers = () => {
 
       await axios.post('https://fuq296ams3.execute-api.us-east-1.amazonaws.com/dev/register', formData);
       setVisible(false);
+      setDataSaved(!dataSaved);
     } catch (error) {
       console.log(error);
     }
@@ -61,19 +64,19 @@ const LotteryNumbers = () => {
   }
 
   return (
-    <div>
+    <div className="flex flex-wrap">
       {lotteryData
         .sort((a, b) => a.numberticket - b.numberticket)
         .map((item, index) => (
           <>
             {item.status === "sold out" ?
               <Tooltip title="Vendido">
-                <button key={item.id} disabled style={{ backgroundColor: '#FF0000', margin: '5px' }}>
+                <button key={item.id} disabled className="bg-red-500 text-center text-white m-2 w-1/20 sm:w-1/10 md:w-1/10">
                   {item.numberticket}
                 </button>
               </Tooltip>
               :
-              <button key={item.numberticket} onClick={() => handleButtonClick(item.numberticket)} style={{ backgroundColor: '#00FF00', margin: '5px' }}>
+              <button key={item.numberticket} onClick={() => handleButtonClick(item.numberticket)} className="bg-green-500 text-white m-2 w-1/20 sm:w-1/10 md:w-1/10">
                 {item.numberticket}
               </button>
             }
